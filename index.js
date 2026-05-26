@@ -1,9 +1,9 @@
-const http = require('http');
+const https = require('https');
 
 const TG_TOKEN = '8896034721:AAGb_tpYOO3PbyOCpkIfSYvnROcac_-VgZ0';
 const CHAT_ID = '-5132037748';
 
-const server = http.createServer(async (req, res) => {
+const server = require('http').createServer(async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -29,9 +29,12 @@ const server = http.createServer(async (req, res) => {
             hostname: 'api.telegram.org',
             path: `/bot${TG_TOKEN}/sendMessage`,
             method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(payload) }
+            headers: {
+              'Content-Type': 'application/json',
+              'Content-Length': Buffer.byteLength(payload)
+            }
           };
-          const r = http.request(options, resolve);
+          const r = https.request(options, resolve);
           r.on('error', reject);
           r.write(payload);
           r.end();
